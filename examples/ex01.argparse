@@ -1,0 +1,9 @@
+This program sums two integers
+
+NUMBER1  a integer
+NUMBER2  a integer
+-b       output in binary 0s and 1s
+-h       output in hexdecimal
+
+
+Developed in NASA labs
