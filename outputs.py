@@ -26,6 +26,17 @@ class PythonOutput(BaseOutput):
 
 class BashOutput(BaseOutput):
     # fixme > gerar um warning indicando que nao suporta positional
+    def get_max_arg_width(self):
+        flag_max = max(list(map(lambda e: len("-" + e[0]), self.visitor.flags)))
+        attr_max = max(list(map(lambda e: len("--" + e[0] + " " + e[0]), self.visitor.namedattributes)))
+        # positional_max = max(list(map(lambda e: len(e[0]), self.visitor.positionals)))
+        multiargs_max = max(list(map(lambda e: len(e[0]), self.visitor.multiargs)))
+        return max([flag_max, attr_max, multiargs_max])
+
+    def format_name(self, name):
+        name_max_width = self.get_max_arg_width()
+        return name + ((name_max_width - len(name)) * " ")
+
     def get_usage(self):
         final_str = "\nprint_usage()\n"
         final_str += "{\n"
@@ -34,9 +45,30 @@ class BashOutput(BaseOutput):
             final_str += " [-{}]".format(flag_name)
         for flag_name, description in self.visitor.namedattributes:
             final_str += " [--{} {}]".format(flag_name, flag_name.upper())
-        final_str += "\necho"
-        final_str += "\necho {}".format(self.visitor.program_desc)
-        final_str += "\necho"
+        for flag_name, description in self.visitor.multiargs:
+            final_str += " {} [{} ...]".format(flag_name, flag_name.upper())
+        final_str += "\n    echo"
+        final_str += "\n    echo {}".format(self.visitor.program_desc)
+        final_str += "\n    echo"
+        if len(self.visitor.multiargs) > 0:
+            final_str += "\n    echo positional arguments:"
+            for flag_name, description in self.visitor.multiargs:
+                final_str += "\n    echo '  ' '{}' '  ' {}".format(
+                    self.format_name(flag_name), description
+                )
+        if len(self.visitor.flags) or len(self.visitor.namedattributes):
+            final_str += "\n    echo"
+            final_str += "\n    echo optional arguments:"
+            for flag_name, description in self.visitor.flags:
+                final_str += "\n    echo '  ' '{}' '  ' {}".format(
+                    self.format_name("-" + flag_name), description
+                )
+
+            for flag_name, description in self.visitor.namedattributes:
+                final_str += "\n    echo '  ' '{}' '  ' {}".format(
+                    self.format_name("--" + flag_name + " " + flag_name.upper()), description
+                )
+
         final_str += "\n\n    exit 2\n"
         final_str += "}\n"
         return final_str
