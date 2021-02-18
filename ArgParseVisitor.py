@@ -29,5 +29,10 @@ class ArgParseVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by ArgParseParser#multiargs.
+    def visitMultiargs(self, ctx:ArgParseParser.MultiargsContext):
+        return self.visitChildren(ctx)
+
+
 
 del ArgParseParser

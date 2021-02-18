@@ -44,5 +44,14 @@ class ArgParseListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by ArgParseParser#multiargs.
+    def enterMultiargs(self, ctx:ArgParseParser.MultiargsContext):
+        pass
+
+    # Exit a parse tree produced by ArgParseParser#multiargs.
+    def exitMultiargs(self, ctx:ArgParseParser.MultiargsContext):
+        pass
+
+
 
 del ArgParseParser

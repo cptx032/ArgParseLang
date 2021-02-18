@@ -41,7 +41,8 @@ if __name__ == "__main__":
     parser.addErrorListener(ConsoleErrorListener())
     parser.buildParseTrees = True
     tree = parser.program()
-    transpiler = TranspilerVisitor()
-    transpiler.visit(tree)
-    print(tree.toStringTree())
+    transpiler = TranspilerVisitor(language="python")
+    print(transpiler.visit(tree))
+    # create a flag (using the same language) to show the tree
+    # print(tree.toStringTree())
     # import ipdb; ipdb.set_trace(context=10)
