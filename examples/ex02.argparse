@@ -1,0 +1,6 @@
+Text colors in your terminal
+
+
+POS:  MESSAGE     The message you want to print
+ATTR: bg          background color
+ATTR: fg          foregraound color
