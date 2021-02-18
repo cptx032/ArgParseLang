@@ -1,3 +1,4 @@
+# https://www.shellscript.sh/tips/getopt/
 BG=unset
 FG=unset
 SHORT_OPTIONS=""
