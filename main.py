@@ -55,6 +55,8 @@ if __name__ == "__main__":
     parser.addErrorListener(ConsoleErrorListener())
     parser.buildParseTrees = True
     tree = parser.program()
+    if parser.getNumberOfSyntaxErrors():
+        sys.exit(1)
     transpiler = TranspilerVisitor(language=args.lang)
     transpiler.visit(tree)
     print(transpiler.output())

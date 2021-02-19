@@ -45,3 +45,5 @@ class TranspilerVisitor(ArgParseVisitor):
         flag_name = context.ARGSATTR().getText().replace("ARGS:", "").strip()
         description = "".join([i.getText() for i in context.LINE()]).strip()
         self.multiargs.append([flag_name, description])
+        if len(self.multiargs) > 1:
+            raise ValueError("It is not possible to create many multiargs")

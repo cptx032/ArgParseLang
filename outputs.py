@@ -27,10 +27,10 @@ class PythonOutput(BaseOutput):
 class BashOutput(BaseOutput):
     # fixme > gerar um warning indicando que nao suporta positional
     def get_max_arg_width(self):
-        flag_max = max(list(map(lambda e: len("-" + e[0]), self.visitor.flags)))
-        attr_max = max(list(map(lambda e: len("--" + e[0] + " " + e[0]), self.visitor.namedattributes)))
+        flag_max = max(list(map(lambda e: len("-" + e[0]), self.visitor.flags)) or [0])
+        attr_max = max(list(map(lambda e: len("--" + e[0] + " " + e[0]), self.visitor.namedattributes)) or [0])
         # positional_max = max(list(map(lambda e: len(e[0]), self.visitor.positionals)))
-        multiargs_max = max(list(map(lambda e: len(e[0]), self.visitor.multiargs)))
+        multiargs_max = max(list(map(lambda e: len(e[0]), self.visitor.multiargs)) or [0])
         return max([flag_max, attr_max, multiargs_max])
 
     def format_name(self, name):

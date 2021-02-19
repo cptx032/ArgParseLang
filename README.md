@@ -1,11 +1,65 @@
 # ArgParseLang
 
-The ArgParse Language was created to help you to create boiler plate code to parse command line arguments.
+Imagine that you are creating a terminal/command line software and you want receive arguments, like: `my_program --name=Angelina --surname=Jolie`. So, you need to create some code to parse these arguments, and you see that to do this in bash is something like:
+
+```bash
+NAME=unset
+SURNAME=unset
+PARSED_ARGUMENTS=$(getopt -a -n $0 -o "h" --long help,,name:,surname: -- "$@")
+
+VALID_ARGUMENTS=$?
+if [ "$VALID_ARGUMENTS" != "0" ]; then
+    print_usage
+fi
+
+eval set -- "$PARSED_ARGUMENTS"
+while :
+do
+    case "$1" in
+        --name ) NAME="$2"; shift 2 ;;
+        --surname ) SURNAME="$2"; shift 2 ;;
+        -h | --help) print_usage ;;
+        --) shift; break ;;
+    esac
+done
+```
+
+The same crazyness you will find in programming languages like C/C++, and so one. Python otherwise, have a more clean API, but can be very weird too:
+
+```python
+# from Python docs
+import argparse
+
+parser = argparse.ArgumentParser(description='Process some integers.')
+parser.add_argument('integers', metavar='N', type=int, nargs='+',
+                    help='an integer for the accumulator')
+parser.add_argument('--sum', dest='accumulate', action='store_const',
+                    const=sum, default=max,
+                    help='sum the integers (default: find the max)')
+
+args = parser.parse_args()
+print(args.accumulate(args.integers))
+```
+
+Just looking, you may ask: "Whats action=store_const means? And what is nargs=+?"
+
+The ArgParse Language was created to help you to create this kind of boiler plate code to parse command line arguments.
 
 Today, ArgParse supports two languages:
 
 - Python 2/3
 - Bash
+
+With ArgParse you will just to create a file with the content like:
+
+```
+My Program
+
+ATTR:  name     First name
+ATTR:  surname  The surname
+```
+
+And the argparse will create the code in your language to parse these arguments.
 
 ## Installing / Dev environment
 - `mkvirtualenv ArgParseLang -p python3` to make a isolated python environment
@@ -49,8 +103,8 @@ Each argument must be separated from each other by one line. The possible types 
 One complete example is:
 
 ```
-This program sums two numbers.
-Made in MIT / NASA labs
+This program sums two numbers
+Made in MIT NASA labs
 
 
 POS:   A    the first term of sum
@@ -117,9 +171,22 @@ echo $MY_FLAG
 ```
 
 ## Testing ArgParse
-WIP
 
-## Help Wanted
+To run the unit tests just do:
+```bash
+python tests.py
+```
+
+
+## I want help/undestand this project
+### undestanding the structure of this project
+This project have basically three important files:
+
+This project is made using [ANTLR4](https://www.antlr.org/), so the grammar file is located in the main folder, called [ArgParse.g4](ArgParse.g4). To the tree processing we use the visitor pattern in the file [TranspilerVisitor.py](TranspilerVisitor.py), also in the main folder. This file imports the file [outputs.py](outputs.py), that contains the output for each language.
+
+### Writing another output languages
+To write another language output just create a class in the [outputs.py](outputs.py) file and edit the [main.py](main.py) to load your class, repeating the pattern already implemented.
+
 We need help to:
 
 - create more output languages:
